@@ -1,0 +1,15 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Maven #
+target/
+
+# Eclipse files #
+# If you need to create them for the first time, just run 'mvn eclipse:eclipse'. #
+.classpath
+.project
+.settings/
