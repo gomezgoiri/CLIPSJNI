@@ -1,6 +1,7 @@
 package net.sf.clipsrules.jni;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.net.URL;
@@ -45,6 +46,12 @@ public class EnvironmentTest {
 	}
 	
 	@Test
+	public void testEval() throws CLIPSError {
+		final PrimitiveValue result = this.env.eval( "(+ 3 4)" );
+		assertEquals(new IntegerValue(7), result);
+	}
+	
+	@Test
 	public void testEvalNotExistingCommand() {
 		try {
 			this.env.eval( "(notexistingcommand cid)" );
@@ -52,6 +59,22 @@ public class EnvironmentTest {
 		} catch(CLIPSError e) {
 			assertEquals( e.getCode(), 3 );
 			assertEquals( e.getModule(), "EXPRNPSR" );
+		}
+	}
+	
+	@Test
+	public void testBuild() throws CLIPSError {
+		assertTrue( this.env.build( "(defrule foo (a) => (assert (b)))" ) );
+	}
+	
+	@Test
+	public void testBuildIncorrectSyntax() throws CLIPSError {
+		try {
+			this.env.build( "(defrule foo (a) ==> (assert (b)))" );
+			fail();
+		} catch(CLIPSError e) {
+			assertEquals( e.getCode(), 2 );
+			assertEquals( e.getModule(), "PRNTUTIL" );
 		}
 	}
 }

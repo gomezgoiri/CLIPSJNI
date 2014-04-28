@@ -1,5 +1,9 @@
 package net.sf.clipsrules.jni;
 
+/**
+ * The errors thrown by CLIPS.
+ * These errors are described in detail in the "Appendix G" of the "Basic Programming Guide".
+ */
 public class CLIPSError extends Exception {
 	private static final long serialVersionUID = 1L;
 	

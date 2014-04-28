@@ -32,9 +32,10 @@ public class Environment {
 		theEnvironment = createEnvironment();
 	}
 
-	/*********************************************************/
-	/* getCLIPSJNIVersion: Gets the CLIPSJNI version number. */
-	/*********************************************************/
+	/**
+	 * @return
+	 * 	CLIPSJNI's version number.
+	 */
 	public static String getCLIPSJNIVersion() {
 		return CLIPSJNI_VERSION;
 	}
@@ -44,9 +45,10 @@ public class Environment {
 	/***************************************************/
 	public static native String getCLIPSVersion();
 
-	/**************************************************************/
-	/* getVersion: Gets the JClips and the CLIPS version numbers. */
-	/**************************************************************/
+	/**
+	 * @return
+	 * 	String representation of CLIPSJNI's and CLIPS' version numbers.
+	 */
 	public static String getVersion() {
 		return "CLIPSJNI version " + getCLIPSJNIVersion() + " (CLIPS version "
 				+ getCLIPSVersion() + ")";
@@ -69,9 +71,14 @@ public class Environment {
 	/****************************************/
 	private native void clear(long env);
 
-	/**********/
-	/* clear: */
-	/**********/
+	/**
+	 * Clears the CLIPS environment.
+	 * 
+	 * Removes all constructs and all associated data structures (such as facts and instances) from the CLIPS environment.
+	 * A clear may be performed safely at any time, however, certain constructs will not allow themselves to be deleted while they are in use.
+	 * For example, while deffacts are being reset (by the reset command), it is not possible to remove them using the clear command.
+	 * Note that the clear command does not effect many environment characteristics (such as the current conflict resolution strategy).
+	 */
 	public void clear() {
 		clear(theEnvironment);
 	}
@@ -96,9 +103,14 @@ public class Environment {
 	/*********/
 	private native void load(long env, String filename);
 
-	/*********/
-	/* load: */
-	/*********/
+	/**
+	 * Loads the constructs stored in the file specified by <i>filename</i> into the environment.
+	 * @param filename
+	 *	The file which stores the constructs to be loaded.
+	 * @throws CLIPSError
+	 *	CLIPS throws an error when it detects any problem.
+	 *	For example, it warns when the syntax of the constructs written into the file is incorrect.
+	 */
 	public void load(String filename) throws CLIPSError {
 		load(theEnvironment, filename);
 	}
@@ -134,9 +146,11 @@ public class Environment {
 	/************/
 	private native boolean unwatch(long env, String watchItem);
 
-	/************/
-	/* unwatch: */
-	/************/
+	/**
+	 * This function disables the effect of the watch command.
+	 * @param watchItem
+	 * @return
+	 */
 	public boolean unwatch(String watchItem) {
 		return unwatch(theEnvironment, watchItem);
 	}
@@ -146,9 +160,20 @@ public class Environment {
 	/********/
 	private native long run(long env, long runLimit);
 
-	/********/
-	/* run: */
-	/********/
+	/**
+	 * Starts execution of the rules.
+	 * <ul>
+	 * 	<li>If the focus stack is empty, then the MAIN module is automatically becomes the current focus.
+	 *  The run command has no additional effect if evaluated while rules are executing. Note that the number of rules fired and timing information is no longer printed after the completion of the run command unless the statistics item is being watched.</li>
+	 * 	<li>If the rules item is being watched, then an informational message will be printed each time a rule is fired.</li>
+	 * </ul>
+	 * 
+	 * @param runLimit
+	 * 	If the optional first argument is positive, execu­tion will cease after the specified number of rule firings or when the agenda con­tains no rule activations.
+	 * 	If there are no arguments or the first argument is a negative integer, execution will cease when the agenda contains no rule activations.
+	 * 
+	 * @return
+	 */
 	public long run(long runLimit) {
 		return run(theEnvironment, runLimit);
 	}
@@ -165,9 +190,19 @@ public class Environment {
 	/*********/
 	private native PrimitiveValue eval(long env, String evalStr);
 
-	/*********/
-	/* eval: */
-	/*********/
+	/**
+	 * The eval function evaluates the string as though it were entered at the command prompt.
+	 * 
+	 * @param evalStr
+	 * 		The string to be evaluated.
+	 *		<b>NOTE:</b> eval does not permit the use of local variables (except when the local variables are defined as part of the command such as with an instance query function), nor will it evaluate any of the construct definition forms (i.e., defrule, deffacts, etc.).
+	 *		The return value is the result of the evaluation of the string (or FALSE if an error occurs).
+	 * @return
+	 * 		A value with the result of the evaluation.
+	 * @throws CLIPSError
+	 * 		CLIPS throws an error when it detects any problem.
+	 *		For example, it warns when evalStr's syntax is incorrect.
+	 */
 	public PrimitiveValue eval(String evalStr) throws CLIPSError {
 		return eval(theEnvironment, evalStr);
 	}
@@ -177,10 +212,17 @@ public class Environment {
 	/**********/
 	private native boolean build(long env, String buildStr);
 
-	/**********/
-	/* build: */
-	/**********/
-	public boolean build(String buildStr) {
+	/**
+	 * The build function evaluates the string as though it were entered at the command prompt.
+	 * @param buildStr
+	 * 		The construct to be added.
+	 * @return
+	 * 		True if the construct was added (or false if an error occurs).
+	 * @throws CLIPSError
+	 * 		CLIPS throws an error when it detects any problem.
+	 * 		For example, it warns when buildStr's syntax is incorrect.
+	 */
+	public boolean build(String buildStr) throws CLIPSError {
 		return build(theEnvironment, buildStr);
 	}
 
@@ -189,9 +231,14 @@ public class Environment {
 	/*****************/
 	private native FactAddressValue assertString(long env, String factStr);
 
-	/*****************/
-	/* assertString: */
-	/*****************/
+	/**
+	 * It adds facts to the fact‑list using the assert.
+	 * @param factStr
+	 * 		The fact to be added.
+	 * 		If a fact is asserted into the fact‑list that exactly matches an already existing fact, the new assertion will be ignored (this default behavior can be changed).
+	 * @return
+	 * 		The address of the newly added fact.
+	 */
 	public FactAddressValue assertString(String factStr) {
 		return assertString(theEnvironment, factStr);
 	}
@@ -478,9 +525,9 @@ public class Environment {
 				theInstance.getInstanceAddress());
 	}
 
-	/************/
-	/* destroy: */
-	/************/
+	/**
+	 * This will deallocate all memory associated with that environment.
+	 */
 	public void destroy() {
 		destroyEnvironment(theEnvironment);
 	}
