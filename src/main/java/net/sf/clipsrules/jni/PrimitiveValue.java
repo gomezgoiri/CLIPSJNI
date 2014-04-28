@@ -1,4 +1,4 @@
-package CLIPSJNI;
+package net.sf.clipsrules.jni;
 
 import java.util.List;
 

@@ -1,19 +1,19 @@
-package CLIPSJNI;
+package net.sf.clipsrules.jni;
 
-public class SymbolValue extends PrimitiveValue
+public class StringValue extends PrimitiveValue
   {
    /****************/
-   /* SymbolValue: */
+   /* StringValue: */
    /****************/
-   public SymbolValue()
+   public StringValue()
      {
       super(new String(""));
      }
 
    /****************/
-   /* SymbolValue: */
+   /* StringValue: */
    /****************/
-   public SymbolValue(
+   public StringValue(
      String value)
      {
       super(value);
@@ -28,26 +28,35 @@ public class SymbolValue extends PrimitiveValue
      }
      
    /****************/
-   /* symbolValue: */
+   /* stringValue: */
    /****************/
-   public String symbolValue() throws Exception
+   public String stringValue() throws Exception
      {
       return (String) getValue();
      }
-     
-   /***********/
+
+   /************/
    /* retain: */
-   /***********/
+   /************/
    public void retain()
      {
-      //System.out.println("SymbolValue retain");
+      //System.out.println("StringValue retain");
      }
-
+     
    /************/
    /* release: */
    /************/
    public void release()
      {
-      //System.out.println("SymbolValue release");
+      //System.out.println("StringValue release");
      }
+
+   /*************/
+   /* toString: */
+   /*************/
+   public String toString()
+     {        
+      return "\"" + super.toString() + "\"";
+     }
+
   }

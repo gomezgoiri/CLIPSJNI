@@ -30,6 +30,7 @@ To create a native library that runs only on the Power PC architecture, enter th
 
 Once you have create the native library, copy the libCLIPSJNI.jnilib file from the CLIPSJNI/library-src to the top level CLIPSJNI directory.
 
+'''WARNING: this makefile has not been updated since 0.3 version.'''
 
 Windows 7
 ---------
@@ -42,6 +43,8 @@ To create the native library DLL, enter the following command:
     nmake -f makefile.win
 
 Once you have create the native library, copy the CLIPSJNI.dll file from the CLIPSJNI/library-src to the top level CLIPSJNI directory.
+
+'''WARNING: this makefile has not been checked on its latest version (0.4) yet.'''
 
 
 Other systems

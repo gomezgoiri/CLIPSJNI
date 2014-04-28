@@ -1,5 +1,4 @@
-
-package CLIPSJNI;
+package net.sf.clipsrules.jni;
 
 public class Environment
   {

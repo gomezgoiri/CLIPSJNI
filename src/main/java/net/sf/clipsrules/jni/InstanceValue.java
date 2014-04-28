@@ -1,4 +1,4 @@
-package CLIPSJNI;
+package net.sf.clipsrules.jni;
 
 public abstract class InstanceValue extends PrimitiveValue
   {

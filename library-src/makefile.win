@@ -1,3 +1,6 @@
+JAVA_INCLUDE = $(JAVA_HOME)include
+JAVA_LIB = $(JAVA_HOME)lib
+
 OBJS = agenda.obj analysis.obj argacces.obj bload.obj bmathfun.obj bsave.obj \
  	classcom.obj classexm.obj classfun.obj classinf.obj classini.obj \
  	classpsr.obj clsltpsr.obj commline.obj conscomp.obj constrct.obj \
@@ -27,15 +30,15 @@ OBJS = agenda.obj analysis.obj argacces.obj bload.obj bmathfun.obj bsave.obj \
  	strngrtr.obj symblbin.obj symblcmp.obj symbol.obj sysdep.obj textpro.obj \
  	tmpltbin.obj tmpltbsc.obj tmpltcmp.obj tmpltdef.obj tmpltfun.obj tmpltlhs.obj \
  	tmpltpsr.obj tmpltrhs.obj tmpltutl.obj userdata.obj userfunctions.obj \
- 	utility.obj watch.obj CLIPSJNI_Environment.obj
+ 	utility.obj watch.obj net_sf_clipsrules_jni_Environment.obj
 
 .c.obj :
-	cl -c -DWIN_MVC -DALLOW_ENVIRONMENT_GLOBALS=0 /I"c:\Program Files\Java\jdk1.6.0_24\include" /I"c:\Program Files\Java\jdk1.6.0_24\include\win32" $<
+	cl -c -DWIN_MVC -DALLOW_ENVIRONMENT_GLOBALS=0 /I$(JAVA_INCLUDE) /I$(JAVA_INCLUDE)\win32" $<
 
 CLIPSJNI.dll : $(OBJS)
-	link /libpath:"c:\Program Files\Java\jdk1.6.0\lib" *.obj /dll /out:CLIPSJNI.dll
+	link /libpath:$(JAVA_LIB) *.obj /dll /out:CLIPSJNI.dll
 
-CLIPSJNI_Environment.obj: CLIPSJNI_Environment.c setup.h envrnmnt.h \
+net_sf_clipsrules_jni_Environment.obj: net_sf_clipsrules_jni_Environment.c setup.h envrnmnt.h \
   symbol.h usrsetup.h clips.h argacces.h \
   expressn.h exprnops.h exprnpsr.h extnfunc.h userdata.h scanner.h \
   pprint.h evaluatn.h constant.h moduldef.h conscomp.h constrct.h \

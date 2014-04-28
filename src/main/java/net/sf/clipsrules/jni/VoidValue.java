@@ -1,4 +1,4 @@
-package CLIPSJNI;
+package net.sf.clipsrules.jni;
 
 public class VoidValue extends PrimitiveValue
   {
