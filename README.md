@@ -1,7 +1,7 @@
 CLIPSJNI
 ========
 
-In this project I will apply [https://sourceforge.net/p/clipsrules/discussion/776945/thread/01312882 some improvements] to the original [https://sourceforge.net/projects/clipsrules/ CLIPSJNI] project:
+In this project I will apply [some improvements](https://sourceforge.net/p/clipsrules/discussion/776945/thread/01312882) to the original [CLIPSJNI](https://sourceforge.net/projects/clipsrules/) project:
 
  * More "standardized" package name (e.g. something like net.sf.clipsrules)
  * Throwing exceptions instead of printing errors on the stdout
