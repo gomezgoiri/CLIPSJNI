@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.sf.clipsrules</groupId>
+  <artifactId>clips.jni</artifactId>
+  <version>0.4</version>
+  <packaging>bundle</packaging>
+
+  <name>clips</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <felix.groupId>org.apache.felix</felix.groupId>
+  </properties>
+  
+  <build>
+    <plugins>
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-compiler-plugin</artifactId>
+	  <configuration>
+	    <source>1.6</source>
+	    <target>1.6</target>
+	  </configuration>
+	  </plugin>
+	  
+	  <!-- To create the OSGi bundle -->
+	  <plugin>
+	      <groupId>org.apache.felix</groupId>
+	      <artifactId>maven-bundle-plugin</artifactId>
+	      <version>2.4.0</version>
+	      <extensions>true</extensions>
+	      <configuration>
+		  <instructions>
+		      <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+		      <Bundle-Version>${project.version}</Bundle-Version>
+		      <Export-Package>
+			      CLIPSJNI.*;version=${project.version}
+		      </Export-Package>
+		      <Import-Package>
+			      *
+		      </Import-Package>
+		  </instructions>
+	      </configuration>
+	  </plugin>
+    </plugins>
+  </build>
+</project>
