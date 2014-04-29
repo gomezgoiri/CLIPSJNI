@@ -22,9 +22,11 @@ Compile a demo
 --------------
 
 Go to the demo's top folder and simply run:
+
     mvn compile
 
 Or to recompile it from scratch:
+
     mvn clean compile
 
 
@@ -32,4 +34,5 @@ Running a demo
 --------------
 
 Go to the demo's top folder and simply run:
+
     mvn exec:java
