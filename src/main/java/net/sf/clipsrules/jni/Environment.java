@@ -1,5 +1,6 @@
 package net.sf.clipsrules.jni;
 
+
 public class Environment {
 	private static final String CLIPSJNI_VERSION = "0.1";
 
@@ -169,8 +170,9 @@ public class Environment {
 	 * </ul>
 	 * 
 	 * @param runLimit
-	 * 	If the optional first argument is positive, execu­tion will cease after the specified number of rule firings or when the agenda con­tains no rule activations.
-	 * 	If there are no arguments or the first argument is a negative integer, execution will cease when the agenda contains no rule activations.
+	 * 	The execu­tion will cease after the specified number of rule firings or when the agenda con­tains no rule activations.
+	 * 	If this argument is a negative integer, execution will cease when the agenda contains no rule activations.
+	 * 	That is, passing a negative runLimit is equivalent to calling run method without arguments.
 	 * 
 	 * @return
 	 */
@@ -178,9 +180,16 @@ public class Environment {
 		return run(theEnvironment, runLimit);
 	}
 
-	/********/
-	/* run: */
-	/********/
+	/**
+	 * Starts execution of the rules.
+	 * <ul>
+	 * 	<li>If the focus stack is empty, then the MAIN module is automatically becomes the current focus.
+	 *  The run command has no additional effect if evaluated while rules are executing. Note that the number of rules fired and timing information is no longer printed after the completion of the run command unless the statistics item is being watched.</li>
+	 * 	<li>If the rules item is being watched, then an informational message will be printed each time a rule is fired.</li>
+	 * </ul>
+	 * 
+	 * @return
+	 */
 	public long run() {
 		return run(theEnvironment, -1);
 	}
@@ -238,8 +247,12 @@ public class Environment {
 	 * 		If a fact is asserted into the fact‑list that exactly matches an already existing fact, the new assertion will be ignored (this default behavior can be changed).
 	 * @return
 	 * 		The address of the newly added fact.
+	 * 
+	 * @throws CLIPSError
+	 * 		CLIPS throws an error when it detects any problem.
+	 * 		For example, it warns when factStr syntax is incorrect.
 	 */
-	public FactAddressValue assertString(String factStr) {
+	public FactAddressValue assertString(String factStr) throws CLIPSError {
 		return assertString(theEnvironment, factStr);
 	}
 
