@@ -27,7 +27,7 @@ public class Environment {
 	/****************/
 	/* Environment: */
 	/****************/
-	protected Environment() {
+	public Environment() {
 		super();
 		theEnvironment = createEnvironment();
 	}

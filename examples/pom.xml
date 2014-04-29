@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <artifactId>clips.jni.examples</artifactId>
+  <groupId>net.sf.clipsrules.jni.examples</groupId>
+  <version>0.4</version>
+  <packaging>pom</packaging>
+  <name>CLIPS examples/demos</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <examples.groupId>net.sf.clipsrules.jni.examples</examples.groupId>
+  </properties>
+  
+  <modules>
+    <module>AnimalDemo</module>
+    <module>AutoDemo</module>
+    <!--<module>SudokuDemo</module>
+    <module>WineDemo</module>-->
+  </modules>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+		<groupId>net.sf.clipsrules</groupId>
+		<artifactId>clips.jni</artifactId>
+		<version>0.4</version>
+		<scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
+  <build>
+    <pluginManagement>
+      <plugins>
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-compiler-plugin</artifactId>
+	    <configuration>
+	      <source>1.6</source>
+	      <target>1.6</target>
+	    </configuration>
+	    </plugin>
+	    
+	    <!-- To execute mains -->
+	    <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>exec-maven-plugin</artifactId>
+	    </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
