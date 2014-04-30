@@ -28,7 +28,10 @@ import javax.swing.table.TableCellRenderer;
 
 import net.sf.clipsrules.jni.CLIPSError;
 import net.sf.clipsrules.jni.Environment;
-import net.sf.clipsrules.jni.PrimitiveValue;
+import net.sf.clipsrules.jni.FactAddressValue;
+import net.sf.clipsrules.jni.FloatValue;
+import net.sf.clipsrules.jni.MultifieldValue;
+import net.sf.clipsrules.jni.StringValue;
 
 /* TBD module qualifier with find-all-facts */
 
@@ -463,21 +466,18 @@ public class WineDemo implements ActionListener {
 	/***************/
 	/* updateWines */
 	/***************/
-	private void updateWines() throws Exception {
+	// It isn't necessary to explicitly throw the ClassCastException,
+	// but I wrote it to make clear that the castings might not always be right.
+	// It depends on the template declarations, which in this case match with the expected value types.
+	private void updateWines() throws ClassCastException, CLIPSError {
 		final String evalStr = "(WINES::get-wine-list)";
-
-		final PrimitiveValue pv = clips.eval(evalStr);
-
+		final MultifieldValue pv = (MultifieldValue) this.clips.eval(evalStr);
 		this.wineList.setRowCount(0);
-
+		
 		for (int i = 0; i < pv.size(); i++) {
-			final PrimitiveValue fv = pv.get(i);
-
-			final int certainty = fv.getFactSlot("certainty").numberValue()
-					.intValue();
-
-			final String wineName = fv.getFactSlot("value").stringValue();
-
+			final FactAddressValue fv = (FactAddressValue) pv.get(i);
+			final int certainty = (int) ((FloatValue) fv.getFactSlot("certainty")).floatValue();
+			final String wineName = ((StringValue) fv.getFactSlot("value")).stringValue();
 			this.wineList.addRow(new Object[] { wineName, new Integer(certainty) });
 		}
 

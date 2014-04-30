@@ -33,7 +33,10 @@ import javax.swing.table.TableColumn;
 
 import net.sf.clipsrules.jni.CLIPSError;
 import net.sf.clipsrules.jni.Environment;
-import net.sf.clipsrules.jni.PrimitiveValue;
+import net.sf.clipsrules.jni.FactAddressValue;
+import net.sf.clipsrules.jni.IntegerValue;
+import net.sf.clipsrules.jni.MultifieldValue;
+import net.sf.clipsrules.jni.StringValue;
 
 /* TBD Allow tabbing between different grids. */
 /* TBD Allow arrow keys to move between different grids. */
@@ -328,20 +331,23 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 			}
 		};
 
-		isExecuting = true;
+		this.isExecuting = true;
 
-		executionThread = new Thread(runThread);
+		this.executionThread = new Thread(runThread);
 
-		jfrm.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		this.jfrm.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		executionThread.start();
+		this.executionThread.start();
 	}
 
 	/*********************/
 	/* onActionPerformed */
 	/*********************/
-	public void onActionPerformed(ActionEvent ae) throws Exception {
-		if (isExecuting)
+	// It isn't necessary to explicitly throw the ClassCastException,
+	// but I wrote it to make clear that the castings might not always be right.
+	// It depends on the template declarations, which in this case match with the expected value types.
+	public void onActionPerformed(ActionEvent ae) throws ClassCastException, CLIPSError {
+		if (this.isExecuting)
 			return;
 
 		/* ========================== */
@@ -349,13 +355,13 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 		/* ========================== */
 
 		if (ae.getActionCommand().equals("Clear")) {
-			solved = false;
+			this.solved = false;
 
-			solveButton.setEnabled(true);
-			techniquesButton.setEnabled(false);
+			this.solveButton.setEnabled(true);
+			this.techniquesButton.setEnabled(false);
 
 			for (int i = 0; i < 9; i++) {
-				JTable theTable = (JTable) mainGrid.getComponent(i);
+				JTable theTable = (JTable) this.mainGrid.getComponent(i);
 
 				for (int r = 0; r < 3; r++) {
 					for (int c = 0; c < 3; c++) {
@@ -370,16 +376,16 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 		/* ========================== */
 
 		else if (ae.getActionCommand().equals("Reset")) {
-			solved = false;
-			solveButton.setEnabled(true);
-			techniquesButton.setEnabled(false);
+			this.solved = false;
+			this.solveButton.setEnabled(true);
+			this.techniquesButton.setEnabled(false);
 
 			for (int i = 0; i < 9; i++) {
-				JTable theTable = (JTable) mainGrid.getComponent(i);
+				JTable theTable = (JTable) this.mainGrid.getComponent(i);
 
 				for (int r = 0; r < 3; r++) {
 					for (int c = 0; c < 3; c++) {
-						theTable.setValueAt(resetValues[i][r][c], r, c);
+						theTable.setValueAt(this.resetValues[i][r][c], r, c);
 					}
 				}
 			}
@@ -394,9 +400,9 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 			/* Reset CLIPS. */
 			/* ============== */
 
-			clips.reset();
-			clips.assertString("(phase expand-any)");
-			clips.assertString("(size 3)");
+			this.clips.reset();
+			this.clips.assertString("(phase expand-any)");
+			this.clips.assertString("(size 3)");
 
 			/* ====================================== */
 			/* Remember the initial starting values */
@@ -404,13 +410,13 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 			/* ====================================== */
 
 			for (int i = 0; i < 9; i++) {
-				JTable theTable = (JTable) mainGrid.getComponent(i);
+				JTable theTable = (JTable) this.mainGrid.getComponent(i);
 				int rowGroup = i / 3;
 				int colGroup = i % 3;
 
 				for (int r = 0; r < 3; r++) {
 					for (int c = 0; c < 3; c++) {
-						resetValues[i][r][c] = theTable.getValueAt(r, c);
+						this.resetValues[i][r][c] = theTable.getValueAt(r, c);
 
 						String assertStr;
 
@@ -420,15 +426,15 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 								+ (i + 1) + ") " + "(id "
 								+ ((i * 9) + (r * 3) + c + 1) + ") ";
 
-						if ((resetValues[i][r][c] == null)
-								|| (resetValues[i][r][c].equals(""))) {
+						if ((this.resetValues[i][r][c] == null)
+								|| (this.resetValues[i][r][c].equals(""))) {
 							assertStr = assertStr + "(value any))";
 						} else {
 							assertStr = assertStr + "(value "
-									+ resetValues[i][r][c] + "))";
+									+ this.resetValues[i][r][c] + "))";
 						}
 
-						clips.assertString(assertStr);
+						this.clips.assertString(assertStr);
 					}
 				}
 			}
@@ -437,10 +443,10 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 			/* Update the status of the buttons. */
 			/* =================================== */
 
-			clearButton.setEnabled(false);
-			resetButton.setEnabled(false);
-			solveButton.setEnabled(false);
-			techniquesButton.setEnabled(false);
+			this.clearButton.setEnabled(false);
+			this.resetButton.setEnabled(false);
+			this.solveButton.setEnabled(false);
+			this.techniquesButton.setEnabled(false);
 
 			/* =================== */
 			/* Solve the puzzle. */
@@ -459,22 +465,21 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 
 			evalStr = "(find-all-facts ((?f technique)) TRUE)";
 
-			PrimitiveValue pv = clips.eval(evalStr);
+			MultifieldValue pv = (MultifieldValue) this.clips.eval(evalStr);
 			int tNum = pv.size();
 
 			for (int i = 1; i <= tNum; i++) {
 				evalStr = "(find-fact ((?f technique-employed)) "
 						+ "(eq ?f:priority " + i + "))";
 
-				pv = clips.eval(evalStr);
+				pv = (MultifieldValue) this.clips.eval(evalStr);
 				if (pv.size() == 0)
 					continue;
 
-				pv = pv.get(0);
-
-				messageStr = messageStr + pv.getFactSlot("priority").intValue()
-						+ ". " + pv.getFactSlot("reason").stringValue()
-						+ "<br>";
+				final FactAddressValue fact = (FactAddressValue) pv.get(0);
+				final int priority = ((IntegerValue) fact.getFactSlot("priority")).intValue();
+				final String reason = ((StringValue) fact.getFactSlot("reason")).stringValue();
+				messageStr = messageStr + priority + ". " + reason + "<br>";
 			}
 
 			JOptionPane.showMessageDialog(jfrm, messageStr,
@@ -510,12 +515,10 @@ public class SudokuDemo implements ActionListener, FocusListener, KeyListener {
 							+ ") " + "(eq ?f:column "
 							+ (c + (colGroup * 3) + 1) + ")))";
 
-					PrimitiveValue pv = clips.eval(evalStr);
-
+					final MultifieldValue pv = (MultifieldValue) this.clips.eval(evalStr);
 					if (pv.size() != 1)
 						continue;
-
-					PrimitiveValue fv = pv.get(0);
+					final FactAddressValue fv = (FactAddressValue) pv.get(0);
 
 					theTable.setValueAt(" " + fv.getFactSlot("value") + " ", r,
 							c);

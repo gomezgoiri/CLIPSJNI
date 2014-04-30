@@ -22,7 +22,10 @@ import javax.swing.SwingUtilities;
 
 import net.sf.clipsrules.jni.CLIPSError;
 import net.sf.clipsrules.jni.Environment;
+import net.sf.clipsrules.jni.MultifieldValue;
 import net.sf.clipsrules.jni.PrimitiveValue;
+import net.sf.clipsrules.jni.FactAddressValue;
+import net.sf.clipsrules.jni.SymbolValue;
 
 /* Implement FindFact which returns just a FactAddressValue or null */
 /* TBD Add size method to PrimitiveValue */
@@ -152,19 +155,25 @@ public class AnimalDemo implements ActionListener {
 		if (url==null) throw new FileNotFoundException( "\"" + filename + "\" does not exist.");
 		return url.getPath();
 	}
+	
+	private FactAddressValue findFirstFact(String evalStr) throws ClassCastException, CLIPSError {
+		final MultifieldValue results = (MultifieldValue) this.clips.eval(evalStr);
+		return (FactAddressValue) results.get(0);
+	}
 
 	/****************/
 	/* nextUIState: */
 	/****************/
-	private void nextUIState() throws Exception {
+	// It isn't necessary to explicitly throw the ClassCastException,
+	// but I wrote it to make clear that the castings might not always be right.
+	// It depends on the template declarations, which in this case match with the expected value types.
+	private void nextUIState() throws ClassCastException, CLIPSError {
 		/* ===================== */
 		/* Get the state-list. */
 		/* ===================== */
 
 		String evalStr = "(find-all-facts ((?f state-list)) TRUE)";
-
-		final String currentID = this.clips.eval(evalStr).get(0).getFactSlot("current")
-				.toString();
+		final String currentID = findFirstFact(evalStr).getFactSlot("current").toString();
 
 		/* =========================== */
 		/* Get the current UI state. */
@@ -172,8 +181,7 @@ public class AnimalDemo implements ActionListener {
 
 		evalStr = "(find-all-facts ((?f UI-state)) " + "(eq ?f:id " + currentID
 				+ "))";
-
-		final PrimitiveValue fv = clips.eval(evalStr).get(0);
+		final FactAddressValue fv = findFirstFact(evalStr);
 
 		/* ======================================== */
 		/* Determine the Next/Prev button states. */
@@ -200,9 +208,8 @@ public class AnimalDemo implements ActionListener {
 		this.choicesPanel.removeAll();
 		this.choicesButtons = new ButtonGroup();
 
-		final PrimitiveValue pv1 = fv.getFactSlot("valid-answers");
-
-		final PrimitiveValue pv2 = fv.getFactSlot("display-answers");
+		final MultifieldValue pv1 = (MultifieldValue) fv.getFactSlot("valid-answers");
+		final MultifieldValue pv2 = (MultifieldValue) fv.getFactSlot("display-answers");
 
 		final String selected = fv.getFactSlot("response").toString();
 
@@ -230,8 +237,8 @@ public class AnimalDemo implements ActionListener {
 		/* Set the label to the display text. */
 		/* ==================================== */
 
-		final String theText = this.animalResources.getString(fv.getFactSlot("display")
-				.symbolValue());
+		final SymbolValue symbol = (SymbolValue) fv.getFactSlot("display");
+		final String theText = this.animalResources.getString( symbol.symbolValue() );
 
 		wrapLabelText(this.displayLabel, theText);
 
@@ -274,18 +281,15 @@ public class AnimalDemo implements ActionListener {
 				});
 			}
 		};
-
 		this.isExecuting = true;
-
 		this.executionThread = new Thread(runThread);
-
 		this.executionThread.start();
 	}
 
 	/*********************/
 	/* onActionPerformed */
 	/*********************/
-	private void onActionPerformed(ActionEvent ae) throws Exception {
+	private void onActionPerformed(ActionEvent ae) throws ClassCastException, CLIPSError {
 		if (this.isExecuting)
 			return;
 
@@ -293,10 +297,8 @@ public class AnimalDemo implements ActionListener {
 		/* Get the state-list. */
 		/* ===================== */
 
-		String evalStr = "(find-all-facts ((?f state-list)) TRUE)";
-
-		String currentID = this.clips.eval(evalStr).get(0).getFactSlot("current")
-				.toString();
+		final String evalStr = "(find-all-facts ((?f state-list)) TRUE)";
+		final String currentID = findFirstFact(evalStr).getFactSlot("current").toString();
 
 		/* ========================= */
 		/* Handle the Next button. */
