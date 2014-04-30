@@ -30,7 +30,7 @@ OBJS = agenda.obj analysis.obj argacces.obj bload.obj bmathfun.obj bsave.obj \
  	strngrtr.obj symblbin.obj symblcmp.obj symbol.obj sysdep.obj textpro.obj \
  	tmpltbin.obj tmpltbsc.obj tmpltcmp.obj tmpltdef.obj tmpltfun.obj tmpltlhs.obj \
  	tmpltpsr.obj tmpltrhs.obj tmpltutl.obj userdata.obj userfunctions.obj \
- 	utility.obj watch.obj net_sf_clipsrules_jni_Environment.obj
+ 	utility.obj watch.obj exceptions.obj net_sf_clipsrules_jni_Environment.obj
 
 .c.obj :
 	cl -c -DWIN_MVC -DALLOW_ENVIRONMENT_GLOBALS=0 /I$(JAVA_INCLUDE) /I$(JAVA_INCLUDE)\win32" $<
@@ -394,6 +394,8 @@ evaluatn.obj: evaluatn.c setup.h envrnmnt.h symbol.h usrsetup.h commline.h \
   prcdrfun.h multifld.h factmngr.h facthsh.h pattern.h match.h network.h \
   ruledef.h constrnt.h cstrccom.h agenda.h reorder.h tmpltdef.h factbld.h \
   proflfun.h sysdep.h dffnxfun.h genrccom.h genrcfun.h object.h
+
+exceptions.obj: exceptions.c clips.h exceptions.h
 
 expressn.obj: expressn.c setup.h envrnmnt.h symbol.h usrsetup.h bload.h \
   utility.h extnfunc.h expressn.h exprnops.h exprnpsr.h scanner.h \

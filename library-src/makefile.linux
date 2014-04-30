@@ -31,10 +31,14 @@ OBJS = agenda.o analysis.o argacces.o bload.o bmathfun.o bsave.o \
  	strngrtr.o symblbin.o symblcmp.o symbol.o sysdep.o textpro.o \
  	tmpltbin.o tmpltbsc.o tmpltcmp.o tmpltdef.o tmpltfun.o tmpltlhs.o \
  	tmpltpsr.o tmpltrhs.o tmpltutl.o userdata.o userfunctions.o \
- 	utility.o watch.o
+ 	utility.o watch.o exceptions.o
 
+
+# The second line of the gcc command is needed because exceptions.o depends on JNI
 .c.o :
-	gcc -c -DLINUX -DALLOW_ENVIRONMENT_GLOBALS=0 -fPIC -std=c99 -Wall -Wundef -Wpointer-arith -Wshadow -Wcast-qual \
+	gcc -c -DLINUX -DALLOW_ENVIRONMENT_GLOBALS=0 -fPIC \
+	    -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE)/linux \
+	    -std=c99 -Wall -Wundef -Wpointer-arith -Wshadow -Wcast-qual \
 	    -Wcast-align -Winline -Wmissing-declarations -Wredundant-decls \
 	    -Woverloaded-virtual -Wmissing-prototypes -Wnested-externs \
 	    -Wstrict-prototypes -Waggregate-return -Wno-implicit $<
@@ -383,6 +387,8 @@ evaluatn.o: evaluatn.c setup.h envrnmnt.h symbol.h usrsetup.h commline.h \
   prcdrfun.h multifld.h factmngr.h facthsh.h pattern.h match.h network.h \
   ruledef.h constrnt.h cstrccom.h agenda.h reorder.h tmpltdef.h factbld.h \
   proflfun.h sysdep.h dffnxfun.h genrccom.h genrcfun.h object.h
+
+exceptions.o: exceptions.c clips.h exceptions.h
 
 expressn.o: expressn.c setup.h envrnmnt.h symbol.h usrsetup.h bload.h \
   utility.h extnfunc.h expressn.h exprnops.h exprnpsr.h scanner.h \
@@ -975,7 +981,7 @@ prdctfun.o: prdctfun.c setup.h envrnmnt.h symbol.h usrsetup.h exprnpsr.h \
   prdctfun.h
 
 prntutil.o: prntutil.c setup.h envrnmnt.h symbol.h usrsetup.h constant.h \
-  utility.h evaluatn.h expressn.h exprnops.h exprnpsr.h extnfunc.h \
+  utility.h evaluatn.h exceptions.h expressn.h exprnops.h exprnpsr.h extnfunc.h \
   userdata.h scanner.h pprint.h argacces.h moduldef.h conscomp.h \
   constrct.h symblcmp.h modulpsr.h router.h prntutil.h multifun.h \
   factmngr.h facthsh.h pattern.h match.h network.h ruledef.h constrnt.h \
