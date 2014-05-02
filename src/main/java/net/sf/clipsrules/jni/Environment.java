@@ -224,7 +224,7 @@ public class Environment {
 	/**
 	 * The build function evaluates the string as though it were entered at the command prompt.
 	 * @param buildStr
-	 * 		The construct to be added.
+	 * 		The construct to be added. That is, defrule, deffacts, etc.
 	 * @return
 	 * 		True if the construct was added (or false if an error occurs).
 	 * @throws CLIPSError
