@@ -6,7 +6,7 @@ In this project I made the [following improvements](https://sourceforge.net/p/cl
  * More "standardized" package name: _net.sf.clipsrules_.
  * Throwing exceptions instead of only printing errors on the stdout.
  * Inline documentation for Environment class' methods and value classes. The idea is to make Java developers' life easier.
- * Mavenizing the project.
+ * Mavenizing the project (and the original demo applications).
  * Creating an OSGi compliant jar.
  * Changes on Value's classes design.
   * In the 0.3 version _PrimitiveValue_ defined all the methods inherited by the subclasses. Each of these methods throw a generic _Exception_ and were overriden in each subclass. IMHO, this is an ankward use of the polimosphism. Additionally, it forces each method to throw a generic and hardly understandable _Exception_.
