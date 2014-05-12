@@ -1,5 +1,5 @@
-JAVA_INCLUDE = $(JAVA_HOME)include
-JAVA_LIB = $(JAVA_HOME)lib
+JAVA_INCLUDE = $(JAVA_HOME)\include
+JAVA_LIB = $(JAVA_HOME)\lib
 
 OBJS = agenda.obj analysis.obj argacces.obj bload.obj bmathfun.obj bsave.obj \
  	classcom.obj classexm.obj classfun.obj classinf.obj classini.obj \
@@ -33,10 +33,10 @@ OBJS = agenda.obj analysis.obj argacces.obj bload.obj bmathfun.obj bsave.obj \
  	utility.obj watch.obj exceptions.obj net_sf_clipsrules_jni_Environment.obj
 
 .c.obj :
-	cl -c -DWIN_MVC -DALLOW_ENVIRONMENT_GLOBALS=0 /I$(JAVA_INCLUDE) /I$(JAVA_INCLUDE)\win32" $<
+	cl -c -DWIN_MVC -DALLOW_ENVIRONMENT_GLOBALS=0 /I"$(JAVA_INCLUDE)" /I"$(JAVA_INCLUDE)\win32" $<
 
 CLIPSJNI.dll : $(OBJS)
-	link /libpath:$(JAVA_LIB) *.obj /dll /out:CLIPSJNI.dll
+	link /libpath:"$(JAVA_LIB)" *.obj /dll /out:CLIPSJNI.dll
 
 net_sf_clipsrules_jni_Environment.obj: net_sf_clipsrules_jni_Environment.c setup.h envrnmnt.h \
   symbol.h usrsetup.h clips.h argacces.h \
