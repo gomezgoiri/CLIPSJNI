@@ -19,7 +19,7 @@ Requirements
 CLIPSJNI project has been __mavenized__.
 This means that [Maven](http://maven.apache.org/) must be installed.
 
-CLIPS' native library must be installed in the system too.
+CLIPS' __native library__ must be installed in the system too.
 The compiled version is provided under _release_ section for Windows and Linux.
 If you want/need to compile it by yourself, check the compilation specifics explained in the _README_ file of the _library-src_ directory.
 
